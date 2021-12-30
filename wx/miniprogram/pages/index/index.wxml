@@ -1,0 +1,26 @@
+
+<map
+      id="myMap"
+      class="map"
+      latitude="{{latitude}}"
+      longitude="{{longitude}}"
+      markers="{{markers}}"
+      covers="{{covers}}"
+      setting="{{setting}}"
+>
+
+   <cover-view class="icon-container">
+      <cover-image class="round" 
+            src="{{avatarURL?avatarURL:'/resources/account.png'}}" 
+            bindtap="onMyTripsTap"/>
+     
+      <cover-image
+          src="/resources/my_location.png" 
+          bindtap="onMyLocationTap" />
+  </cover-view>
+  <cover-view  class="btn-container bg-grey round" bindtap="onScanTap">
+    <cover-view>扫码租车</cover-view>
+  </cover-view>
+</map>
+<modal title="身份认证" contents="需要身份认证才能租车"
+       id="licModal" />

@@ -19,6 +19,6 @@
 .vscode
 wx/miniprogram/**/*.js
 wx/node_modules
-ColorUI
+# ColorUI
 server
 

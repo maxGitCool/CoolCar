@@ -1,2 +1,50 @@
 # CoolCar
-小杨酷车
+此版本纯微信小程序
+技术：TypeScript、Prism、asyic/await、CSS
+小程序开发
+	框架选择
+		多端
+			不在微信小程序中开发，在多端中开发部署到小程序
+			wepy
+			mpvue
+			taro
+			uni-app
+		组件库
+			vant
+			weui
+				微信开发
+			wux
+		原生
+			小程序更新迭代快
+			小程序及框架都有坑
+			本项目没多端需求
+			课程需要
+		样式库
+			ColorUI样式库
+				https://juejin.cn/post/6844903784351531021
+				https://github.com/weilanwl/ColorUI
+	首页地图页
+		地图组件
+		地点获取
+		叠加Marker
+			Marker位置更新
+	身份认证向导页
+		图片选取
+		身份识别
+		向导页流程
+		身份证状态更新
+	扫描租车页
+		用户头像的获取
+		本地存储的应用
+	用车页
+		地点实时更新
+		时间/价格实时更新
+	我的行程页
+		swiper组件
+		scroll-view组件
+		垂直导航实现
+	页面路由
+		使用TypeScript保证路由的正确性
+	导航页
+	结果页
+	分享

@@ -6,6 +6,7 @@
     "pages/driving/driving",
     "pages/mytrips/mytrips"
   ],
+  
   "permission": {
     "scope.userLocation": {
       "desc": "你的位置信息将用于【酷车驾驶】位置接口的效果展示"

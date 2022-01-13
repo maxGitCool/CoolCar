@@ -1,4 +1,4 @@
-:: protobuff转javascript和typescript代码
+﻿:: protobuffer 转typeScript
 @echo off
 set PBTS_BIN_DIR=..\..\wx\miniprogram\node_modules\.bin
 set PBTS_OUT_DIR=..\..\wx\miniprogram\service\proto_gen

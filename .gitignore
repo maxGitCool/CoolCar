@@ -18,6 +18,9 @@
 # 排除git管理的目录及文件
 .vscode
 wx/miniprogram/**/*.js
-wx/node_modules
+node_modules
+miniprogram_npm
 .vscode
+!**/wx/miniprogram/service/proto_gen/*.js
+
 

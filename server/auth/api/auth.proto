@@ -1,0 +1,18 @@
+syntax ="proto3";
+package auth.v1;
+
+// 生成包的路径,.代表当前目录，trippb是包名称
+option go_package = "./auth/api/gen/v1;authpb";
+
+
+message LoginRequest{
+    string code=1;
+}
+
+message LoginResponse {
+    string access_Token=1;
+    int32 expires_in = 2;
+}
+service AuthService {
+    rpc Login(LoginRequest) returns (LoginResponse);
+}

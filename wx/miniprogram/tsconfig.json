@@ -18,11 +18,15 @@
     "strictPropertyInitialization": true,
     "lib": ["ES2020"],    
     "types":["miniprogram-api-typings"],
+   
   },
   "include": [
-    "./**/*.ts"
-  ],
+    "./**/*.ts",
+    "./**/**/*.ts",
+    "./*.ts",
+    "*.ts"],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "miniprogram_npm"
   ]
 }

@@ -14,6 +14,21 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
+// GRPC 测试
+// 1. 服务器端实现 Server/trip.go
+// 2. 客户端实现 Client/main.go
+// 3. 此函数是运行服务器端
+func mainGRPC() {
+	listener, err := net.Listen("tcp", ":8081")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	srv := grpc.NewServer()
+	trippb.RegisterTripServiceServer(srv, &trip.Service{})
+	log.Fatal(srv.Serve(listener))
+}
+
+// GRPC GetWay 测试 ====> 可以让http请求GRPC服务
 func main() {
 
 	go startGRPCGateWay()

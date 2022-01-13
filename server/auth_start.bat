@@ -1,0 +1,2 @@
+start auth_TypeScript.bat
+pause

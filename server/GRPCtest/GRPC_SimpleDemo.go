@@ -1,5 +1,7 @@
-package hellword
+package main
 
+// GRPC 简单demo
+// 查看GRPC的传输格式二进制流
 import (
 	"encoding/json"
 	"fmt"
@@ -10,7 +12,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func hellword() {
+func main1() {
 	trip := trippb.Trip{
 		Start:       "abc",
 		End:         "def",

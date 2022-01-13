@@ -5,8 +5,8 @@ export namespace CoolCar {
     /** Properties of a Location. */
     interface ILocation {
 
-        /** Location Latitude */
-        Latitude?: (number|null);
+        /** Location latitude */
+        latitude?: (number|null);
 
         /** Location longitude */
         longitude?: (number|null);
@@ -21,8 +21,8 @@ export namespace CoolCar {
          */
         constructor(properties?: CoolCar.ILocation);
 
-        /** Location Latitude. */
-        public Latitude: number;
+        /** Location latitude. */
+        public latitude: number;
 
         /** Location longitude. */
         public longitude: number;

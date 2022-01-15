@@ -1,77 +1,54 @@
 package main
 
 import (
+	"CoolCar/auth/auth"
+	"CoolCar/auth/dao"
+	"CoolCar/auth/wechat"
+	"context"
 	"log"
 	"net"
-	"net/http"
+	authpb "worker/CoolCar/server/auth/api/gen/v1"
 
-	trip "worker/CoolCar/server/Server"
-	trippb "worker/CoolCar/server/proto/gen/go"
-
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"golang.org/x/net/context"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"google.golang.org/protobuf/encoding/protojson"
 )
 
-// GRPC 测试
-// 1. 服务器端实现 Server/trip.go
-// 2. 客户端实现 Client/main.go
-// 3. 此函数是运行服务器端
-func mainGRPC() {
-	listener, err := net.Listen("tcp", ":8081")
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-	srv := grpc.NewServer()
-	trippb.RegisterTripServiceServer(srv, &trip.Service{})
-	log.Fatal(srv.Serve(listener))
-}
-
-// GRPC GetWay 测试 ====> 可以让http请求GRPC服务
+// 启动登陆GRPC服务
 func main() {
-
-	go startGRPCGateWay()
-
-	listener, err := net.Listen("tcp", ":8081")
+	logger, err := newZapLogger()
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatalf("cannot create logger : %v", err)
 	}
-	srv := grpc.NewServer()
-	trippb.RegisterTripServiceServer(srv, &trip.Service{})
-	log.Fatal(srv.Serve(listener))
+	lis, err := net.Listen("tcp", ":8081")
+	if err != nil {
+		logger.Fatal("cannot listen ", zap.Error(err))
+	}
+	// mongodb
+	c := context.Background()
+	mongoClient, err := mongo.Connect(c, options.Client().ApplyURI("mongodb://admin:123456@192.168.99.100:27017/?authSource=admin&readPreference=primary&appname=mongodb-vscode%200.7.0&directConnection=true&ssl=false"))
+	if err != nil {
+		logger.Fatal("cannot connection mongodb : + %v", zap.Error(err))
+	}
+
+	// 3d745384c9e3ffb097a58ef30bf99876
+	s := grpc.NewServer()
+	authpb.RegisterAuthServiceServer(s, &auth.Service{
+		OpenIDResolver: &wechat.Service{
+			AppId:     "wxebd9cab99716914e",
+			AppSecret: "3d745384c9e3ffb097a58ef30bf99876",
+		},
+		Mongo:  dao.NewMongo(mongoClient.Database("coolcar")),
+		Logger: logger,
+	})
+
+	err = s.Serve(lis)
+	logger.Fatal("cannot listen to ", zap.Error(err))
 }
 
-func startGRPCGateWay() {
-	c := context.Background()          // 没有内容的上下文
-	c, cancel := context.WithCancel(c) //上下文可以cancel的能力
-	defer cancel()                     //直接调用
-
-	// mx:miltiplex  分发器
-	//WithMarshalerOption 控制GRPC与JSON格式转换
-	mux := runtime.NewServeMux(runtime.WithMarshalerOption(
-		runtime.MIMEWildcard, &runtime.JSONPb{
-			MarshalOptions: protojson.MarshalOptions{
-				UseEnumNumbers: true,
-				UseProtoNames:  true,
-			},
-			UnmarshalOptions: protojson.UnmarshalOptions{},
-		},
-	))
-	//GRPC GateWay做客户端去连接GRPC的Trip的GRPC服务器
-	err := trippb.RegisterTripServiceHandlerFromEndpoint(
-		c,
-		mux,
-		":8081",
-		[]grpc.DialOption{grpc.WithInsecure()}, //TCP明文
-	)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-	// GRPC GateWay自己也会有一个监听端口，对外http://localhost:8080/trip/{id} 可访问
-	err = http.ListenAndServe(":8080", mux)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-
+func newZapLogger() (*zap.Logger, error) {
+	cfg := zap.NewDevelopmentConfig()
+	cfg.EncoderConfig.TimeKey = ""
+	return cfg.Build()
 }

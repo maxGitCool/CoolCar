@@ -10,7 +10,7 @@ message LoginRequest{
 }
 
 message LoginResponse {
-    string access_Token=1;
+    string access_token=1;
     int32 expires_in = 2;
 }
 service AuthService {

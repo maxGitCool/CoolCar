@@ -1,0 +1,57 @@
+// 插入两条测试数据
+use ("coolcar")
+db.account.insertMany([
+  {open_id:'123'},
+  {open_id:'456'}
+])
+// 创建函数模拟登陆
+use ("coolcar")
+// 示例1 ：
+// 查询open_id存在则更新内容，如果不存在则插入
+// 可以返回结果
+function resolveOpenID(open_id) {
+  return db.account.findAndModify({
+    query : {
+      open_id : open_id
+    },
+    update : {
+        $set: {
+          open_id: open_id, // 上面条件查到后执行此更新
+          login_count:100,
+          assection:'ss'
+        }
+    },
+    upsert:true, // 如果找不到则新增一条记录，把$set值设置上
+    new:true, //对于新插入数据返回新数据，如果更新则显示更新后
+  })
+}
+resolveOpenID('abcd')
+// 示例1 ：
+// 查询open_id存在则更新内容，如果不存在则插入
+// 可以返回结果
+function resolveOpenID_noReturn(open_id) {
+  return db.account.updateOne({
+    open_id : open_id
+  },{
+    $set: {
+      open_id: open_id, // 上面条件查到后执行此更新
+      login_count:100
+    }
+  },{
+    upsert:true // 如果找不到则新增一条记录，把$set值设置上
+  })
+}
+resolveOpenID('123')
+
+// findAndModify操作无法保证open_id原子性，需要创建索引
+use("coolcar")
+db.account.createIndex({
+    open_id:1
+},{
+    unique:true
+})
+
+use("coolcar")
+db.account.find({
+  open_id:'123'
+})

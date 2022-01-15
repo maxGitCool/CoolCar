@@ -1,0 +1,80 @@
+use ("coolcar")
+// 插入操作
+db.account.insert({
+  open_id:"111",
+  login_count:0
+})
+// 查询操作
+use ("coolcar")
+db.account.find({
+    $or :[
+        {
+            login_count: {$gt:4},
+            open_id:"234"
+        },
+        {
+            login_count:0
+        }
+    ]
+})
+
+db.account.find({
+  _id:"user123"
+  
+})
+// 多路径查找
+use ("coolcar")
+db.account.find({
+    "profile.age" : {$lte: 30}
+})
+
+//删除操作
+use("coolcar")
+db.account.drop({
+   _id:"61e18228bb2777b39251eb7c"
+})
+// 更新示例1
+use("coolcar")
+db.account.update({
+  _id: ObjectId("61e182606f157d6ede20baa9")
+},{
+  $set: {
+    login_count:100
+  }
+})
+
+// 更新示例2
+// 单条记录更新原子性
+use("coolcar")
+db.account.update({
+  _id: ObjectId("61e182606f157d6ede20baa9")
+},{
+  $inc: {
+    login_count:1
+  }
+})
+
+// 更新示例3
+// 单条记录更新时，查询到后可以追加内容
+use("coolcar")
+db.account.updateOne({
+  _id: ObjectId("61e182606f157d6ede20baa9")
+},{
+$set: {
+  profile: {
+      name:'abc',
+      age:28,
+      photo_url:'http:example.com/123'
+  }
+}
+})
+use ("coolcar")
+db.account.find()
+
+// 创建索引
+// 1 代表从小到大 -1 从大到小
+use ("coolcar")
+db.account.createIndex({
+    "profile.age":1
+})
+

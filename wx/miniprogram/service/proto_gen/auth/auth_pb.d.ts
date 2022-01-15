@@ -59,8 +59,8 @@ export namespace auth {
         /** Properties of a LoginResponse. */
         interface ILoginResponse {
 
-            /** LoginResponse access_Token */
-            access_Token?: (string|null);
+            /** LoginResponse accessToken */
+            accessToken?: (string|null);
 
             /** LoginResponse expiresIn */
             expiresIn?: (number|null);
@@ -75,8 +75,8 @@ export namespace auth {
              */
             constructor(properties?: auth.v1.ILoginResponse);
 
-            /** LoginResponse access_Token. */
-            public access_Token: string;
+            /** LoginResponse accessToken. */
+            public accessToken: string;
 
             /** LoginResponse expiresIn. */
             public expiresIn: number;
